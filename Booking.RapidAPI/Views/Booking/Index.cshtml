@@ -1,0 +1,32 @@
+﻿@model Booking.RapidAPI.Models.BookingViewModel
+
+<h2>Booking Arama Sonuçları</h2>
+
+@if (Model?.data != null && Model.data.Any())
+{
+    <ul>
+        @foreach (var item in Model.data)
+        {
+            <li style="margin-bottom:20px; list-style:none; border:1px solid #ccc; padding:10px; border-radius:8px;">
+                <h3>@item.name</h3>
+                <p><strong>Şehir:</strong> @item.city_name</p>
+                <p><strong>Ülke:</strong> @item.country</p>
+                <p><strong>Otel Sayısı:</strong> @item.nr_hotels</p>
+                @if (!string.IsNullOrEmpty(item.image_url))
+                {
+                    <img src="@item.image_url" alt="@item.name" style="max-width:200px; height:auto; border-radius:5px;" />
+                }
+                else
+                {
+                    <p>Resim yok.</p>
+                }
+                <p><strong>Coğrafi Konum:</strong> @item.latitude, @item.longitude</p>
+                <p><strong>Etiket:</strong> @item.label</p>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>Sonuç bulunamadı.</p>
+}
