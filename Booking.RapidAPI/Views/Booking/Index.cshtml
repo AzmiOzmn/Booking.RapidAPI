@@ -1,32 +1,50 @@
-﻿@model Booking.RapidAPI.Models.BookingViewModel
+﻿@model SearchBookingViewModel
 
-<h2>Booking Arama Sonuçları</h2>
+<h2>Otel Arama</h2>
 
-@if (Model?.data != null && Model.data.Any())
+<form asp-action="Index" method="post">
+    <div>
+        <label>Şehir</label>
+        <input asp-for="City" />
+        <span asp-validation-for="City" style="color:red"></span>
+    </div>
+    <div>
+        <label>Kişi Sayısı</label>
+        <input asp-for="Adults" type="number" min="1" />
+    </div>
+    <div>
+        <label>Giriş Tarihi</label>
+        <input asp-for="ArrivalDate" type="date" />
+    </div>
+    <div>
+        <label>Çıkış Tarihi</label>
+        <input asp-for="DepartureDate" type="date" />
+    </div>
+    <button type="submit">Ara</button>
+</form>
+
+@if (Model.Results != null && Model.Results.data != null && Model.Results.data.Any())
 {
+    <h3>Arama Sonuçları (@Model.City)</h3>
     <ul>
-        @foreach (var item in Model.data)
+        @foreach (var item in Model.Results.data)
         {
-            <li style="margin-bottom:20px; list-style:none; border:1px solid #ccc; padding:10px; border-radius:8px;">
-                <h3>@item.name</h3>
-                <p><strong>Şehir:</strong> @item.city_name</p>
-                <p><strong>Ülke:</strong> @item.country</p>
-                <p><strong>Otel Sayısı:</strong> @item.nr_hotels</p>
-                @if (!string.IsNullOrEmpty(item.image_url))
-                {
-                    <img src="@item.image_url" alt="@item.name" style="max-width:200px; height:auto; border-radius:5px;" />
-                }
-                else
-                {
-                    <p>Resim yok.</p>
-                }
-                <p><strong>Coğrafi Konum:</strong> @item.latitude, @item.longitude</p>
-                <p><strong>Etiket:</strong> @item.label</p>
+            <li>
+                <strong>@item.name</strong> - @item.city_name <br />
+                Otel Sayısı: @item.nr_hotels <br />
+                Bölge: @item.region <br />
+                Ülke: @item.country
             </li>
         }
     </ul>
 }
-else
+else if (Model.Results != null)
 {
     <p>Sonuç bulunamadı.</p>
+}
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
